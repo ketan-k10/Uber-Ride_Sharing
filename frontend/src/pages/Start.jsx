@@ -1,15 +1,17 @@
-
 import React from 'react'
 import { Link } from 'react-router-dom'
 
 const Start = () => {
   return (
-    <div>
-      <div className='bg-cover bg-center bg-[url(https://images.unsplash.com/photo-1619059558110-c45be64b73ae?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)] h-screen pt-8 flex justify-between flex-col w-full'>
-        <img className='w-16 ml-8' src="https://cdn-assets-eu.frontify.com/s3/frontify-enterprise-files-eu/eyJwYXRoIjoid2VhcmVcL2ZpbGVcLzhGbTh4cU5SZGZUVjUxYVh3bnEyLnN2ZyJ9:weare:F1cOF9Bps96cMy7r9Y2d7affBYsDeiDoIHfqZrbcxAw?width=1200&height=417" alt="" />
-        <div className='bg-white pb-8 py-4 px-4'>
-          <h2 className='text-[30px] font-semibold'>Get Started with Uber</h2>
-          <Link to='/login' className='flex items-center justify-center w-full bg-black text-white py-3 rounded-lg mt-5'>Continue</Link>
+    <div className='bg-background h-screen flex justify-center items-center'>
+      <div className='bg-cover bg-center bg-[url(https://images.unsplash.com/photo-1555626906-fcf10d6851b4?q=80&w=2000&auto=format&fit=crop)] h-screen sm:h-[800px] w-full sm:max-w-md sm:rounded-2xl sm:shadow-2xl sm:shadow-primary/20 pt-8 flex justify-between flex-col relative overflow-hidden'>
+        <div className='ml-8 text-3xl font-extrabold tracking-tight text-white drop-shadow-md'>
+          Smart<span className="text-primary">-Ride</span>
+        </div>
+        <div className='bg-surface/95 backdrop-blur-md pb-8 py-6 px-6 sm:rounded-b-2xl border-t border-slate-700'>
+          <h2 className='text-[30px] font-semibold mb-1 text-white'>Get Started with Smart-Ride</h2>
+          <p className='text-textMuted mb-5'>Your AI-powered ride companion.</p>
+          <Link to='/login' className='flex items-center justify-center w-full bg-primary hover:bg-primaryHover transition flex-grow text-white py-3 rounded-lg mt-2 font-medium'>Continue</Link>
         </div>
       </div>
     </div>
