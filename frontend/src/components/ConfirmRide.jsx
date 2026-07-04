@@ -1,4 +1,6 @@
 import React from 'react'
+import { VEHICLES } from '../constants/vehicles'
+import VehicleImage from './VehicleImage'
 
 const RideInfoRow = ({ icon, label, value, border = true }) => (
     <div className={`flex items-center gap-4 p-4 ${border ? 'border-b border-borderColor' : ''}`}>
@@ -13,23 +15,27 @@ const RideInfoRow = ({ icon, label, value, border = true }) => (
 )
 
 const ConfirmRide = (props) => {
-    const vehicleImages = {
-        car: 'https://swyft.pl/wp-content/uploads/2023/05/how-many-people-can-a-uberx-take.jpg',
-        moto: 'https://www.uber-assets.com/image/upload/f_auto,q_auto:eco,c_fill,h_638,w_956/v1649231091/assets/2c/7fa194-c954-49b2-9c6d-a3b8601370f5/original/Uber_Moto_Orange_312x208_pixels_Mobile.png',
-        auto: 'https://www.uber-assets.com/image/upload/f_auto,q_auto:eco,c_fill,h_368,w_552/v1648431773/assets/1d/db8c56-0204-4ce4-81ce-56a11a07fe98/original/Uber_Auto_558x372_pixels_Desktop.png'
-    }
+    const vehicle = VEHICLES[props.vehicleType] || VEHICLES.car
 
     return (
         <div>
-            <button
-                className='absolute top-3 left-1/2 -translate-x-1/2 w-10 h-1 bg-borderColor rounded-full hover:bg-textMuted transition'
-                onClick={() => props.setConfirmRidePanel(false)}
-            ></button>
+            {/* Visual drag handle */}
+            <div className='absolute top-3 left-1/2 -translate-x-1/2 w-10 h-1 bg-borderColor rounded-full'></div>
 
-            <h3 className='text-2xl font-serif font-semibold text-textMain mb-6'>Confirm your Ride</h3>
+            {/* Header with a clear back button */}
+            <div className='flex items-center gap-2 mb-6 -mt-1'>
+                <button
+                    onClick={() => props.setConfirmRidePanel(false)}
+                    className='h-9 w-9 -ml-1 flex items-center justify-center rounded-full hover:bg-inputBg text-textMain transition'
+                    aria-label='Go back'
+                >
+                    <i className="ri-arrow-left-line text-xl"></i>
+                </button>
+                <h3 className='text-2xl font-serif font-semibold text-textMain'>Confirm your Ride</h3>
+            </div>
 
             <div className='flex flex-col items-center mb-6'>
-                <img className='h-20 object-contain' src={vehicleImages[props.vehicleType] || vehicleImages.car} alt="Vehicle" />
+                <VehicleImage type={vehicle.key} src={vehicle.img} className='h-20 object-contain' iconSize='text-5xl' />
             </div>
 
             <div className='bg-inputBg rounded-xl border border-borderColor overflow-hidden mb-6'>
@@ -42,11 +48,12 @@ const ConfirmRide = (props) => {
                 onClick={() => {
                     props.setVehicleFound(true)
                     props.setConfirmRidePanel(false)
+                    props.setVehiclePanel(false)
                     props.createRide()
                 }}
                 className='w-full bg-primary hover:bg-primaryHover text-white font-medium p-4 rounded-xl transition text-base shadow-sm'
             >
-                Confirm & Find Driver
+                Confirm &amp; Find Driver
             </button>
         </div>
     )

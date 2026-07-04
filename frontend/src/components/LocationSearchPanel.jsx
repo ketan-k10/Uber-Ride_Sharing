@@ -1,12 +1,16 @@
 import React from 'react'
 
-const LocationSearchPanel = ({ suggestions, setVehiclePanel, setPanelOpen, setPickup, setDestination, activeField }) => {
+const LocationSearchPanel = ({ suggestions, setPanelOpen, setPickup, setDestination, activeField, setActiveField }) => {
 
     const handleSuggestionClick = (suggestion) => {
         if (activeField === 'pickup') {
             setPickup(suggestion)
+            // Move the user straight to the destination field
+            setActiveField('destination')
         } else if (activeField === 'destination') {
             setDestination(suggestion)
+            // Both locations chosen — collapse the suggestions panel
+            setPanelOpen(false)
         }
     }
 

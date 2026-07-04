@@ -1,4 +1,5 @@
 import React from 'react'
+import Avatar from './Avatar'
 
 const RideInfoRow = ({ icon, label, value, border = true }) => (
     <div className={`flex items-center gap-4 p-4 ${border ? 'border-b border-borderColor' : ''}`}>
@@ -24,7 +25,7 @@ const WaitingForDriver = (props) => {
 
             <div className='flex items-center justify-between p-4 bg-inputBg border border-borderColor rounded-xl mb-6'>
                 <div className='flex items-center gap-3'>
-                    <img className='h-11 w-11 rounded-full object-cover border border-borderColor' src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRdlMd7stpWUCmjpfRjUsQ72xSWikidbgaI1w&s" alt="Captain" />
+                    <Avatar className='h-11 w-11 rounded-full object-cover border border-borderColor' src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRdlMd7stpWUCmjpfRjUsQ72xSWikidbgaI1w&s" />
                     <div>
                         <h2 className='text-base font-medium text-textMain capitalize'>{props.ride?.captain.fullname.firstname}</h2>
                         <p className='text-xs text-textMuted'>{props.ride?.captain.vehicle.plate}</p>

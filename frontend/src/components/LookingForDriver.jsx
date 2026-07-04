@@ -15,10 +15,8 @@ const RideInfoRow = ({ icon, label, value, border = true }) => (
 const LookingForDriver = (props) => {
     return (
         <div>
-            <button
-                className='absolute top-3 left-1/2 -translate-x-1/2 w-10 h-1 bg-borderColor rounded-full hover:bg-textMuted transition'
-                onClick={() => props.setVehicleFound(false)}
-            ></button>
+            {/* Visual drag handle */}
+            <div className='absolute top-3 left-1/2 -translate-x-1/2 w-10 h-1 bg-borderColor rounded-full'></div>
 
             <h3 className='text-2xl font-serif font-semibold text-textMain mb-2'>Finding your driver</h3>
             <p className='text-textMuted text-sm mb-6'>Sit tight, we're looking for a nearby captain…</p>
@@ -37,6 +35,13 @@ const LookingForDriver = (props) => {
                 <RideInfoRow icon="ri-map-pin-2-fill" label="Destination" value={props.destination} />
                 <RideInfoRow icon="ri-currency-line" label="Fare" value={`₹${props.fare[props.vehicleType]} · Cash`} border={false} />
             </div>
+
+            <button
+                onClick={() => props.setVehicleFound(false)}
+                className='w-full bg-surface border border-borderColor hover:bg-inputBg text-textMain font-medium py-4 rounded-2xl transition text-sm'
+            >
+                Cancel
+            </button>
         </div>
     )
 }

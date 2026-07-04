@@ -2,6 +2,7 @@ import React, { useContext } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { SocketContext } from '../context/SocketContext'
 import LiveTracking from '../components/LiveTracking'
+import Avatar from '../components/Avatar'
 
 const Riding = () => {
     const location = useLocation()
@@ -31,7 +32,7 @@ const Riding = () => {
                 {/* Captain info */}
                 <div className='flex items-center justify-between mb-4'>
                     <div className='flex items-center gap-3'>
-                        <img className='h-11 w-11 rounded-full object-cover border border-borderColor' src="https://swyft.pl/wp-content/uploads/2023/05/how-many-people-can-a-uberx-take.jpg" alt="Car" />
+                        <Avatar className='h-11 w-11 rounded-full object-cover border border-borderColor' src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRdlMd7stpWUCmjpfRjUsQ72xSWikidbgaI1w&s" />
                         <div>
                             <h4 className='text-base font-semibold text-textMain capitalize'>{ride?.captain.fullname.firstname}</h4>
                             <p className='text-xs text-textMuted'>{ride?.captain.vehicle.plate}</p>
