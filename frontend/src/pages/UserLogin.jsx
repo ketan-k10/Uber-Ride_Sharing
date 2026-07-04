@@ -11,70 +11,59 @@ const UserLogin = () => {
   const navigate = useNavigate()
 
   const submitHandler = async (e) => {
-    e.preventDefault();
-    const userData = { email: email, password: password }
+    e.preventDefault()
     try {
-      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/users/login`, userData)
+      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/users/login`, { email, password })
       if (response.status === 200) {
-        const data = response.data
-        setUser(data.user)
-        localStorage.setItem('token', data.token)
+        setUser(response.data.user)
+        localStorage.setItem('token', response.data.token)
         navigate('/home')
       }
-    } catch(err) {
-      console.log(err)
-    }
+    } catch(err) { console.log(err) }
   }
 
   return (
-    <div className='bg-background min-h-screen flex justify-center items-center py-8 px-4'>
-      <div className='max-w-[420px] w-full flex flex-col justify-between bg-surface rounded-2xl shadow-sm border border-borderColor p-10 min-h-[600px]'>
-        <div>
-          <div className='mb-12'>
-            <h1 className='text-3xl font-serif font-semibold text-textMain tracking-tight mb-2'>Sign In</h1>
-            <p className='text-textMuted font-light'>Enter your details to access your account.</p>
+    <div className='h-full flex flex-col bg-background px-7 pt-14 pb-10'>
+      {/* Brand */}
+      <div className='mb-10'>
+        <h1 className='text-3xl font-serif font-semibold text-textMain'>Smart<span className='text-primary'>-Ride</span></h1>
+      </div>
+
+      <div className='flex-1'>
+        <h2 className='text-2xl font-serif font-semibold text-textMain mb-1'>Welcome back</h2>
+        <p className='text-textMuted text-sm mb-8 font-light'>Sign in to continue your journey.</p>
+
+        <form onSubmit={submitHandler}>
+          <div className='mb-4'>
+            <label className='block text-xs font-medium uppercase tracking-widest text-textMuted mb-2'>Email</label>
+            <input
+              required value={email} onChange={(e) => setEmail(e.target.value)}
+              className='bg-inputBg text-textMain rounded-xl px-4 py-3.5 border border-borderColor focus:ring-1 focus:ring-primary focus:border-primary focus:outline-none w-full text-sm placeholder:text-textMuted/50 transition'
+              type="email" placeholder='hello@example.com'
+            />
           </div>
+          <div className='mb-8'>
+            <label className='block text-xs font-medium uppercase tracking-widest text-textMuted mb-2'>Password</label>
+            <input
+              required value={password} onChange={(e) => setPassword(e.target.value)}
+              className='bg-inputBg text-textMain rounded-xl px-4 py-3.5 border border-borderColor focus:ring-1 focus:ring-primary focus:border-primary focus:outline-none w-full text-sm placeholder:text-textMuted/50 transition'
+              type="password" placeholder='••••••••'
+            />
+          </div>
+          <button className='w-full bg-primary hover:bg-primaryHover text-white font-medium rounded-2xl py-4 transition shadow-sm mb-4'>
+            Sign In
+          </button>
+        </form>
 
-          <form onSubmit={(e) => submitHandler(e)}>
-            <div className='mb-5'>
-              <label className='block text-sm font-medium mb-2 text-textMain'>Email address</label>
-              <input
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className='bg-inputBg text-textMain rounded-xl px-4 py-3 border border-borderColor focus:ring-1 focus:ring-primary focus:border-primary focus:outline-none w-full text-base placeholder:text-textMuted/60 transition shadow-sm'
-                type="email"
-                placeholder='hello@example.com'
-              />
-            </div>
+        <p className='text-center text-sm text-textMuted'>
+          New here? <Link to='/signup' className='text-primary font-medium'>Create account</Link>
+        </p>
+      </div>
 
-            <div className='mb-8'>
-              <label className='block text-sm font-medium mb-2 text-textMain'>Password</label>
-              <input
-                className='bg-inputBg text-textMain rounded-xl px-4 py-3 border border-borderColor focus:ring-1 focus:ring-primary focus:border-primary focus:outline-none w-full text-base placeholder:text-textMuted/60 transition shadow-sm'
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required type="password"
-                placeholder='••••••••'
-              />
-            </div>
-
-            <button className='bg-primary hover:bg-primaryHover text-white font-medium mb-5 rounded-xl px-4 py-3.5 w-full text-base transition shadow-sm'>
-              Sign in
-            </button>
-          </form>
-          
-          <p className='text-center text-textMuted text-sm'>
-            New here? <Link to='/signup' className='text-textMain font-medium hover:underline underline-offset-4 decoration-borderColor transition'>Create account</Link>
-          </p>
-        </div>
-        
-        <div className='mt-10 pt-6 border-t border-borderColor'>
-          <Link
-            to='/captain-login'
-            className='flex items-center justify-center text-textMain bg-white border border-borderColor hover:bg-inputBg font-medium rounded-xl px-4 py-3.5 w-full text-sm transition shadow-sm'
-          >Sign in as Captain</Link>
-        </div>
+      <div className='pt-6 border-t border-borderColor mt-6'>
+        <Link to='/captain-login' className='flex items-center justify-center gap-2 text-textMuted bg-white border border-borderColor hover:bg-inputBg font-medium rounded-2xl py-3.5 w-full text-sm transition'>
+          <i className="ri-steering-2-line"></i> Sign in as Captain
+        </Link>
       </div>
     </div>
   )

@@ -11,44 +11,43 @@ const CaptainRiding = () => {
     const location = useLocation()
     const rideData = location.state?.ride
 
-    useGSAP(function () {
-        if (finishRidePanel) { gsap.to(finishRidePanelRef.current, { transform: 'translateY(0)' }) }
-        else { gsap.to(finishRidePanelRef.current, { transform: 'translateY(100%)' }) }
+    useGSAP(() => {
+        gsap.to(finishRidePanelRef.current, { transform: finishRidePanel ? 'translateY(0)' : 'translateY(100%)', duration: 0.35 })
     }, [ finishRidePanel ])
 
     return (
-        <div className='h-screen relative flex flex-col justify-end overflow-hidden bg-background text-textMain'>
+        <div className='h-full relative overflow-hidden bg-background flex flex-col'>
 
-            {/* Nav */}
-            <div className='fixed p-6 top-0 flex items-center justify-between w-full z-30'>
-                <div className='bg-surface/90 px-4 py-2 rounded-xl backdrop-blur-md border border-borderColor shadow-sm'>
-                    <span className='text-xl font-serif font-semibold tracking-tight text-textMain'>
-                        Smart<span className="text-accent">-Ride</span>
-                    </span>
-                </div>
-                <Link to='/captain-home' className='h-11 w-11 bg-surface border border-borderColor flex items-center justify-center rounded-full shadow-sm hover:bg-inputBg transition'>
-                    <i className="text-xl ri-logout-box-r-line text-textMain"></i>
-                </Link>
-            </div>
-
-            {/* Full screen map */}
-            <div className='h-screen w-screen fixed top-0 left-0 z-[-1]'>
+            {/* Map */}
+            <div className='flex-1 relative'>
                 <LiveTracking />
+                <div className='absolute top-5 left-4 right-4 flex items-center justify-between z-10'>
+                    <div className='bg-surface/90 px-4 py-2 rounded-2xl backdrop-blur-md border border-borderColor shadow-sm'>
+                        <span className='text-base font-serif font-semibold text-textMain'>
+                            Smart<span className="text-primary">-Ride</span>
+                        </span>
+                    </div>
+                    <Link to='/captain-home' className='h-10 w-10 bg-surface/90 backdrop-blur-md border border-borderColor flex items-center justify-center rounded-full shadow-sm'>
+                        <i className="ri-logout-box-r-line text-textMain"></i>
+                    </Link>
+                </div>
             </div>
 
-            {/* Bottom action panel */}
+            {/* Bottom action bar — tap to open finish panel */}
             <div
-                className='bg-surface border-t border-borderColor shadow-[0_-10px_40px_rgba(0,0,0,0.08)] p-6 z-20 rounded-t-3xl cursor-pointer'
+                className='bg-surface border-t border-borderColor px-5 py-5 rounded-t-3xl shadow-[0_-10px_40px_rgba(0,0,0,0.08)] cursor-pointer'
                 onClick={() => setFinishRidePanel(true)}
             >
-                <div className='w-10 h-1 bg-borderColor rounded-full mx-auto mb-5'></div>
+                <div className='flex justify-center mb-4'>
+                    <div className='w-10 h-1 bg-borderColor rounded-full'></div>
+                </div>
                 <div className='flex items-center justify-between'>
                     <div>
-                        <p className='text-xs text-textMuted uppercase tracking-widest mb-1'>Arriving at destination</p>
+                        <p className='text-xs text-textMuted uppercase tracking-widest mb-0.5'>En Route</p>
                         <h4 className='text-lg font-serif font-semibold text-textMain'>4 KM away</h4>
                     </div>
                     <button
-                        className='bg-primary hover:bg-primaryHover text-white font-medium py-3 px-8 rounded-xl transition shadow-sm'
+                        className='bg-primary hover:bg-primaryHover text-white font-medium py-3 px-7 rounded-2xl transition shadow-sm text-sm'
                         onClick={(e) => { e.stopPropagation(); setFinishRidePanel(true) }}
                     >
                         Complete Ride
@@ -56,11 +55,9 @@ const CaptainRiding = () => {
                 </div>
             </div>
 
-            {/* Finish Ride Panel */}
-            <div ref={finishRidePanelRef} className='fixed w-full z-40 bottom-0 translate-y-full bg-surface border-t border-borderColor shadow-2xl px-6 py-8 pt-12 rounded-t-3xl text-textMain'>
-                <FinishRide
-                    ride={rideData}
-                    setFinishRidePanel={setFinishRidePanel} />
+            {/* Finish Ride slide-up */}
+            <div ref={finishRidePanelRef} className='absolute bottom-0 left-0 right-0 z-40 translate-y-full bg-surface rounded-t-3xl shadow-2xl border-t border-borderColor px-5 py-5 pt-8 max-h-[85%] overflow-y-auto'>
+                <FinishRide ride={rideData} setFinishRidePanel={setFinishRidePanel} />
             </div>
         </div>
     )

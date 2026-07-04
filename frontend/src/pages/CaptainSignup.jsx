@@ -13,95 +13,81 @@ const CaptainSignup = () => {
   const [ vehiclePlate, setVehiclePlate ] = useState('')
   const [ vehicleCapacity, setVehicleCapacity ] = useState('')
   const [ vehicleType, setVehicleType ] = useState('')
-
-  const { captain, setCaptain } = React.useContext(CaptainDataContext)
+  const { setCaptain } = React.useContext(CaptainDataContext)
 
   const submitHandler = async (e) => {
     e.preventDefault()
-    const captainData = {
-      fullname: { firstname: firstName, lastname: lastName },
-      email: email,
-      password: password,
-      vehicle: { color: vehicleColor, plate: vehiclePlate, capacity: vehicleCapacity, vehicleType: vehicleType }
-    }
     try {
-      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/captains/register`, captainData)
+      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/captains/register`, {
+        fullname: { firstname: firstName, lastname: lastName },
+        email, password,
+        vehicle: { color: vehicleColor, plate: vehiclePlate, capacity: vehicleCapacity, vehicleType }
+      })
       if (response.status === 201) {
-        const data = response.data
-        setCaptain(data.captain)
-        localStorage.setItem('token', data.token)
+        setCaptain(response.data.captain)
+        localStorage.setItem('token', response.data.token)
         navigate('/captain-home')
       }
     } catch(err) { console.log(err) }
   }
 
+  const inputClass = 'bg-inputBg text-textMain rounded-xl px-4 py-3.5 border border-borderColor focus:ring-1 focus:ring-primary focus:border-primary focus:outline-none w-full text-sm placeholder:text-textMuted/50 transition'
+  const labelClass = 'block text-xs font-medium uppercase tracking-widest text-textMuted mb-2'
+
   return (
-    <div className='bg-background min-h-[110vh] sm:min-h-screen flex justify-center items-center py-10 px-4'>
-      <div className='max-w-[480px] w-full flex flex-col justify-between bg-surface rounded-2xl shadow-sm border border-borderColor p-8 sm:p-10'>
-        <div>
-          <div className='mb-8'>
-            <h1 className='text-3xl font-serif font-semibold text-textMain tracking-tight mb-2'>Register Fleet</h1>
-            <p className='text-textMuted font-light'>Join as a Smart-Ride captain.</p>
-          </div>
-
-          <form onSubmit={(e) => submitHandler(e)}>
-            <h3 className='text-sm font-medium mb-3 text-textMain'>Personal Information</h3>
-            <div className='flex gap-4 mb-4'>
-              <input required
-                className='bg-inputBg text-textMain rounded-xl px-4 py-3 border border-borderColor focus:ring-1 focus:ring-primary focus:border-primary focus:outline-none w-1/2 text-sm placeholder:text-textMuted/60 transition shadow-sm'
-                type="text" placeholder='First name' value={firstName} onChange={(e) => setFirstName(e.target.value)} />
-              <input required
-                className='bg-inputBg text-textMain rounded-xl px-4 py-3 border border-borderColor focus:ring-1 focus:ring-primary focus:border-primary focus:outline-none w-1/2 text-sm placeholder:text-textMuted/60 transition shadow-sm'
-                type="text" placeholder='Last name' value={lastName} onChange={(e) => setLastName(e.target.value)} />
-            </div>
-
-            <div className='mb-4'>
-              <input required
-                value={email} onChange={(e) => setEmail(e.target.value)}
-                className='bg-inputBg text-textMain rounded-xl px-4 py-3 border border-borderColor focus:ring-1 focus:ring-primary focus:border-primary focus:outline-none w-full text-sm placeholder:text-textMuted/60 transition shadow-sm'
-                type="email" placeholder='Email address' />
-            </div>
-
-            <div className='mb-8'>
-              <input required type="password"
-                className='bg-inputBg text-textMain rounded-xl px-4 py-3 border border-borderColor focus:ring-1 focus:ring-primary focus:border-primary focus:outline-none w-full text-sm placeholder:text-textMuted/60 transition shadow-sm'
-                value={password} onChange={(e) => setPassword(e.target.value)}
-                placeholder='Password' />
-            </div>
-
-            <h3 className='text-sm font-medium mb-3 text-textMain border-t border-borderColor pt-6'>Vehicle Information</h3>
-            <div className='flex gap-4 mb-4'>
-              <input required
-                className='bg-inputBg text-textMain rounded-xl px-4 py-2.5 border border-borderColor focus:ring-1 focus:ring-primary focus:border-primary focus:outline-none w-1/2 text-sm placeholder:text-textMuted/60'
-                type="text" placeholder='Color (e.g. Silver)' value={vehicleColor} onChange={(e) => setVehicleColor(e.target.value)} />
-              <input required
-                className='bg-inputBg text-textMain rounded-xl px-4 py-2.5 border border-borderColor focus:ring-1 focus:ring-primary focus:border-primary focus:outline-none w-1/2 text-sm placeholder:text-textMuted/60'
-                type="text" placeholder='License Plate' value={vehiclePlate} onChange={(e) => setVehiclePlate(e.target.value)} />
-            </div>
-            <div className='flex gap-4 mb-8'>
-              <input required
-                className='bg-inputBg text-textMain rounded-xl px-4 py-2.5 border border-borderColor focus:ring-1 focus:ring-primary focus:border-primary focus:outline-none w-1/2 text-sm placeholder:text-textMuted/60'
-                type="number" placeholder='Capacity (seats)' value={vehicleCapacity} onChange={(e) => setVehicleCapacity(e.target.value)} />
-              <select required
-                className='bg-inputBg text-textMain rounded-xl px-4 py-2.5 border border-borderColor focus:ring-1 focus:ring-primary focus:border-primary focus:outline-none w-1/2 text-sm'
-                value={vehicleType} onChange={(e) => setVehicleType(e.target.value)}>
-                <option value="" disabled>Vehicle Type</option>
-                <option value="car">Car</option>
-                <option value="auto">Auto</option>
-                <option value="moto">Moto</option>
-              </select>
-            </div>
-
-            <button className='bg-primary hover:bg-primaryHover text-white font-medium mb-5 rounded-xl px-4 py-3.5 w-full text-base transition shadow-sm'>
-              Submit Application
-            </button>
-          </form>
-          <p className='text-center text-textMuted text-sm'>
-            Already a captain? <Link to='/captain-login' className='text-textMain font-medium hover:underline underline-offset-4 decoration-borderColor transition'>Log in</Link>
-          </p>
-        </div>
+    <div className='min-h-full flex flex-col bg-background px-7 pt-14 pb-10'>
+      <div className='mb-8'>
+        <h1 className='text-3xl font-serif font-semibold text-textMain'>Smart<span className='text-primary'>-Ride</span></h1>
+        <p className='text-xs text-textMuted tracking-widest uppercase mt-1'>Captain Portal</p>
       </div>
+
+      <h2 className='text-2xl font-serif font-semibold text-textMain mb-1'>Register Fleet</h2>
+      <p className='text-textMuted text-sm mb-8 font-light'>Join as a Smart-Ride captain.</p>
+
+      <form onSubmit={submitHandler}>
+        {/* Personal */}
+        <p className={labelClass}>Full Name</p>
+        <div className='flex gap-3 mb-4'>
+          <input required value={firstName} onChange={(e) => setFirstName(e.target.value)} className={inputClass} type="text" placeholder='First' />
+          <input required value={lastName} onChange={(e) => setLastName(e.target.value)} className={inputClass} type="text" placeholder='Last' />
+        </div>
+        <div className='mb-4'>
+          <label className={labelClass}>Email</label>
+          <input required value={email} onChange={(e) => setEmail(e.target.value)} className={inputClass} type="email" placeholder='captain@example.com' />
+        </div>
+        <div className='mb-7'>
+          <label className={labelClass}>Password</label>
+          <input required value={password} onChange={(e) => setPassword(e.target.value)} className={inputClass} type="password" placeholder='••••••••' />
+        </div>
+
+        {/* Vehicle */}
+        <div className='border-t border-borderColor pt-6 mb-4'>
+          <p className={labelClass}>Vehicle Details</p>
+          <div className='flex gap-3'>
+            <input required value={vehicleColor} onChange={(e) => setVehicleColor(e.target.value)} className={inputClass} type="text" placeholder='Color' />
+            <input required value={vehiclePlate} onChange={(e) => setVehiclePlate(e.target.value)} className={inputClass} type="text" placeholder='Plate No.' />
+          </div>
+        </div>
+        <div className='flex gap-3 mb-8'>
+          <input required value={vehicleCapacity} onChange={(e) => setVehicleCapacity(e.target.value)} className={inputClass} type="number" placeholder='Seats' />
+          <select required value={vehicleType} onChange={(e) => setVehicleType(e.target.value)} className={inputClass}>
+            <option value="" disabled>Type</option>
+            <option value="car">Car</option>
+            <option value="auto">Auto</option>
+            <option value="moto">Moto</option>
+          </select>
+        </div>
+
+        <button className='w-full bg-primary hover:bg-primaryHover text-white font-medium rounded-2xl py-4 transition shadow-sm mb-4'>
+          Register as Captain
+        </button>
+      </form>
+
+      <p className='text-center text-sm text-textMuted'>
+        Already a captain? <Link to='/captain-login' className='text-primary font-medium'>Sign in</Link>
+      </p>
     </div>
   )
 }
+
 export default CaptainSignup

@@ -3,11 +3,65 @@
 @tailwind utilities;
 
 @layer base {
-  body {
-    @apply bg-background text-textMain antialiased font-sans font-light;
+  /* Outer page — the warm linen "desk" the phone sits on */
+  html, body, #root {
+    height: 100%;
+    width: 100%;
+    background-color: #EDE9E1;
+    @apply antialiased font-sans;
   }
 
+  /* All headings use Playfair Display */
   h1, h2, h3, h4, h5, h6 {
     @apply font-serif text-textMain;
+  }
+
+  /* Phone-frame wrapper */
+  .phone-frame {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 390px;
+    height: 844px;
+    max-height: 100dvh;
+    border-radius: 2.5rem;
+    overflow: hidden;
+    background: #FAFAF8;
+    box-shadow:
+      0 0 0 8px #2A2520,
+      0 0 0 10px #3D3830,
+      0 30px 80px rgba(0,0,0,0.35),
+      0 10px 30px rgba(0,0,0,0.15);
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* On actual mobile phones, go full screen — no frame */
+  @media (max-width: 430px) {
+    .phone-frame {
+      width: 100%;
+      height: 100%;
+      max-height: 100%;
+      border-radius: 0;
+      box-shadow: none;
+      position: relative;
+      top: 0;
+      left: 0;
+      transform: none;
+    }
+    html, body, #root {
+      background-color: #FAFAF8;
+    }
+  }
+
+  /* Inner content area fills the phone */
+  .phone-content {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: relative;
+    height: 100%;
+    width: 100%;
   }
 }

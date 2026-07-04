@@ -7,19 +7,29 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: '#FAF9F6', // Alabaster cream
-        surface: '#FFFFFF', // Crisp white cards
-        primary: '#2D2B2A', // Charcoal for major buttons
-        primaryHover: '#1A1818',
-        accent: '#D38D7A', // Muted terracotta
-        textMain: '#2D2B2A', 
-        textMuted: '#787673',
-        inputBg: '#F2EFEC',
-        borderColor: '#E6E4DE'
+        // Outer page background (warm linen - the "desk" the phone sits on)
+        pageBackground: '#EDE9E1',
+        // Phone frame / app background
+        background: '#FAFAF8',
+        surface: '#FFFFFF',
+        // Claude-inspired warm terracotta primary
+        primary: '#C96442',
+        primaryHover: '#A8512F',
+        // Soft warm accent
+        accent: '#C96442',
+        // Text
+        textMain: '#3D3929',
+        textMuted: '#8C8A7D',
+        // Inputs & borders
+        inputBg: '#F5F3EF',
+        borderColor: '#E8E4DC',
       },
       fontFamily: {
         serif: ['"Playfair Display"', 'serif'],
         sans: ['"Inter"', 'sans-serif'],
+      },
+      borderRadius: {
+        phone: '2.5rem',
       }
     },
   },
