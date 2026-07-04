@@ -1,6 +1,7 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import Avatar from './Avatar'
 
 const RideInfoRow = ({ icon, label, value, border = true }) => (
     <div className={`flex items-center gap-4 p-4 ${border ? 'border-b border-borderColor' : ''}`}>
@@ -30,16 +31,24 @@ const FinishRide = (props) => {
 
     return (
         <div>
-            <button
-                className='absolute top-3 left-1/2 -translate-x-1/2 w-10 h-1 bg-borderColor rounded-full hover:bg-textMuted transition'
-                onClick={() => props.setFinishRidePanel(false)}
-            ></button>
+            {/* Visual drag handle */}
+            <div className='absolute top-3 left-1/2 -translate-x-1/2 w-10 h-1 bg-borderColor rounded-full'></div>
 
-            <h3 className='text-2xl font-serif font-semibold text-textMain mb-6'>Finish this Ride</h3>
+            {/* Header with a clear back button */}
+            <div className='flex items-center gap-2 mb-6 -mt-1'>
+                <button
+                    onClick={() => props.setFinishRidePanel(false)}
+                    className='h-9 w-9 -ml-1 flex items-center justify-center rounded-full hover:bg-inputBg text-textMain transition'
+                    aria-label='Go back'
+                >
+                    <i className="ri-arrow-left-line text-xl"></i>
+                </button>
+                <h3 className='text-2xl font-serif font-semibold text-textMain'>Finish this Ride</h3>
+            </div>
 
             <div className='flex items-center justify-between p-4 bg-inputBg border border-borderColor rounded-xl mb-6'>
                 <div className='flex items-center gap-3'>
-                    <img className='h-11 w-11 rounded-full object-cover border border-borderColor' src="https://i.pinimg.com/236x/af/26/28/af26280b0ca305be47df0b799ed1b12b.jpg" alt="Rider" />
+                    <Avatar className='h-11 w-11 rounded-full object-cover border border-borderColor' src="https://i.pinimg.com/236x/af/26/28/af26280b0ca305be47df0b799ed1b12b.jpg" />
                     <div>
                         <h2 className='text-base font-medium text-textMain capitalize'>{props.ride?.user.fullname.firstname}</h2>
                         <p className='text-xs text-textMuted'>Rider</p>

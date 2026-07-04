@@ -1,4 +1,5 @@
 import React from 'react'
+import Avatar from './Avatar'
 
 const RideInfoRow = ({ icon, label, value, border = true }) => (
     <div className={`flex items-center gap-4 p-4 ${border ? 'border-b border-borderColor' : ''}`}>
@@ -15,16 +16,14 @@ const RideInfoRow = ({ icon, label, value, border = true }) => (
 const RidePopUp = (props) => {
     return (
         <div>
-            <button
-                className='absolute top-3 left-1/2 -translate-x-1/2 w-10 h-1 bg-borderColor rounded-full hover:bg-textMuted transition'
-                onClick={() => props.setRidePopupPanel(false)}
-            ></button>
+            {/* Visual drag handle */}
+            <div className='absolute top-3 left-1/2 -translate-x-1/2 w-10 h-1 bg-borderColor rounded-full'></div>
 
             <h3 className='text-2xl font-serif font-semibold text-textMain mb-6'>New Ride Request</h3>
 
             <div className='flex items-center justify-between p-4 bg-inputBg border border-borderColor rounded-xl mb-6'>
                 <div className='flex items-center gap-3'>
-                    <img className='h-11 w-11 rounded-full object-cover border border-borderColor' src="https://i.pinimg.com/236x/af/26/28/af26280b0ca305be47df0b799ed1b12b.jpg" alt="Rider" />
+                    <Avatar className='h-11 w-11 rounded-full object-cover border border-borderColor' src="https://i.pinimg.com/236x/af/26/28/af26280b0ca305be47df0b799ed1b12b.jpg" />
                     <div>
                         <h2 className='text-base font-medium text-textMain capitalize'>{props.ride?.user.fullname.firstname + " " + props.ride?.user.fullname.lastname}</h2>
                         <p className='text-xs text-textMuted'>Rider</p>
@@ -48,7 +47,7 @@ const RidePopUp = (props) => {
                     className='w-1/3 bg-white border border-borderColor hover:bg-inputBg text-textMuted font-medium p-3.5 rounded-xl transition text-sm'
                 >Ignore</button>
                 <button
-                    onClick={() => { props.setConfirmRidePopupPanel(true); props.confirmRide() }}
+                    onClick={() => props.confirmRide()}
                     className='flex-1 bg-primary hover:bg-primaryHover text-white font-medium p-3.5 rounded-xl transition text-sm shadow-sm'
                 >Accept Ride</button>
             </div>

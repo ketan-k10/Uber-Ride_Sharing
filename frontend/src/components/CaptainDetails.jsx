@@ -1,6 +1,7 @@
 import React from 'react'
 import { useContext } from 'react'
 import { CaptainDataContext } from '../context/CapatainContext'
+import Avatar from './Avatar'
 
 const CaptainDetails = () => {
     const { captain } = useContext(CaptainDataContext)
@@ -9,7 +10,7 @@ const CaptainDetails = () => {
         <div>
             <div className='flex items-center justify-between mb-8'>
                 <div className='flex items-center justify-start gap-4'>
-                    <img className='h-12 w-12 rounded-full object-cover border-2 border-borderColor' src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRdlMd7stpWUCmjpfRjUsQ72xSWikidbgaI1w&s" alt="Captain" />
+                    <Avatar className='h-12 w-12 rounded-full object-cover border-2 border-borderColor' src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRdlMd7stpWUCmjpfRjUsQ72xSWikidbgaI1w&s" />
                     <div>
                         <h4 className='text-lg font-serif font-semibold capitalize text-textMain leading-tight'>{captain.fullname.firstname + " " + captain.fullname.lastname}</h4>
                         <p className='text-xs text-textMuted font-medium uppercase tracking-widest'>Captain</p>

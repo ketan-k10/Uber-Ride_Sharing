@@ -1,19 +1,12 @@
-import React, { useRef, useState } from 'react'
+import React, { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import FinishRide from '../components/FinishRide'
-import { useGSAP } from '@gsap/react'
-import gsap from 'gsap'
 import LiveTracking from '../components/LiveTracking'
 
 const CaptainRiding = () => {
     const [ finishRidePanel, setFinishRidePanel ] = useState(false)
-    const finishRidePanelRef = useRef(null)
     const location = useLocation()
     const rideData = location.state?.ride
-
-    useGSAP(() => {
-        gsap.to(finishRidePanelRef.current, { transform: finishRidePanel ? 'translateY(0)' : 'translateY(100%)', duration: 0.35 })
-    }, [ finishRidePanel ])
 
     return (
         <div className='h-full relative overflow-hidden bg-background flex flex-col'>
@@ -56,7 +49,7 @@ const CaptainRiding = () => {
             </div>
 
             {/* Finish Ride slide-up */}
-            <div ref={finishRidePanelRef} className='absolute bottom-0 left-0 right-0 z-40 translate-y-full bg-surface rounded-t-3xl shadow-2xl border-t border-borderColor px-5 py-5 pt-8 max-h-[85%] overflow-y-auto'>
+            <div className={`absolute bottom-0 left-0 right-0 z-40 bg-surface rounded-t-3xl shadow-2xl border-t border-borderColor px-5 py-5 pt-8 max-h-[85%] overflow-y-auto transition-transform duration-300 ${finishRidePanel ? 'translate-y-0' : 'translate-y-full'}`}>
                 <FinishRide ride={rideData} setFinishRidePanel={setFinishRidePanel} />
             </div>
         </div>
