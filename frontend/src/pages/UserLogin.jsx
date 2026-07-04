@@ -7,20 +7,34 @@ import axios from 'axios'
 const UserLogin = () => {
   const [ email, setEmail ] = useState('')
   const [ password, setPassword ] = useState('')
-  const { user, setUser } = useContext(UserDataContext)
+  const [ error, setError ] = useState('')
+  const [ loading, setLoading ] = useState(false)
+  const { setUser } = useContext(UserDataContext)
   const navigate = useNavigate()
 
-  const submitHandler = async (e) => {
-    e.preventDefault()
+  const login = async (credentials) => {
+    setError('')
+    setLoading(true)
     try {
-      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/users/login`, { email, password })
+      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/users/login`, credentials)
       if (response.status === 200) {
         setUser(response.data.user)
         localStorage.setItem('token', response.data.token)
         navigate('/home')
       }
-    } catch(err) { console.log(err) }
+    } catch (err) {
+      setError(err?.response?.data?.message || 'Could not sign in. Please try again.')
+    } finally {
+      setLoading(false)
+    }
   }
+
+  const submitHandler = (e) => {
+    e.preventDefault()
+    login({ email, password })
+  }
+
+  const demoLogin = () => login({ email: 'demo@smartride.com', password: 'demo1234' })
 
   return (
     <div className='h-full flex flex-col bg-background px-7 pt-14 pb-10'>
@@ -31,7 +45,28 @@ const UserLogin = () => {
 
       <div className='flex-1'>
         <h2 className='text-2xl font-serif font-semibold text-textMain mb-1'>Welcome back</h2>
-        <p className='text-textMuted text-sm mb-8 font-light'>Sign in to continue your journey.</p>
+        <p className='text-textMuted text-sm mb-6 font-light'>Sign in to continue your journey.</p>
+
+        {/* Demo login — no credentials needed */}
+        <button
+          onClick={demoLogin}
+          disabled={loading}
+          className='w-full flex items-center justify-center gap-2 bg-inputBg border border-borderColor hover:border-primary text-textMain font-medium rounded-2xl py-3.5 mb-5 text-sm transition disabled:opacity-60'
+        >
+          <i className="ri-flashlight-line text-primary"></i> Try demo as Rider
+        </button>
+
+        <div className='flex items-center gap-3 mb-5'>
+          <div className='h-px bg-borderColor flex-1'></div>
+          <span className='text-xs text-textMuted'>or sign in</span>
+          <div className='h-px bg-borderColor flex-1'></div>
+        </div>
+
+        {error && (
+          <div className='mb-4 text-sm text-primary bg-primary/10 border border-primary/20 rounded-xl px-4 py-3'>
+            {error}
+          </div>
+        )}
 
         <form onSubmit={submitHandler}>
           <div className='mb-4'>
@@ -50,8 +85,11 @@ const UserLogin = () => {
               type="password" placeholder='••••••••'
             />
           </div>
-          <button className='w-full bg-primary hover:bg-primaryHover text-white font-medium rounded-2xl py-4 transition shadow-sm mb-4'>
-            Sign In
+          <button
+            disabled={loading}
+            className='w-full bg-primary hover:bg-primaryHover text-white font-medium rounded-2xl py-4 transition shadow-sm mb-4 disabled:opacity-70'
+          >
+            {loading ? 'Signing in…' : 'Sign In'}
           </button>
         </form>
 
