@@ -45,7 +45,10 @@ Deploy order: **Database → Backend → Frontend** (the frontend needs the back
 | `DB_CONNECT` | your Atlas connection string |
 | `JWT_SECRET` | a long random string |
 | `GOOGLE_MAPS_API` | Google Maps **server** key |
+| `GEMINI_API_KEY` | Gemini API key for voice booking (from https://aistudio.google.com) |
 | `NODE_ENV` | `production` |
+
+> Optional: set `GEMINI_MODEL` to override the default voice model (`gemini-3.1-flash-lite`).
 
 > `PORT` is injected by Render automatically — don't set it.
 
