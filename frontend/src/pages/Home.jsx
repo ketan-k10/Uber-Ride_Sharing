@@ -10,6 +10,8 @@ import { SocketContext } from '../context/SocketContext'
 import { UserDataContext } from '../context/UserContext'
 import { useNavigate } from 'react-router-dom'
 import LiveTracking from '../components/LiveTracking'
+import VoiceBooking from '../components/VoiceBooking'
+import { VEHICLES } from '../constants/vehicles'
 
 const Home = () => {
     const [ pickup, setPickup ] = useState('')
@@ -25,6 +27,7 @@ const Home = () => {
     const [ fare, setFare ] = useState({})
     const [ vehicleType, setVehicleType ] = useState(null)
     const [ ride, setRide ] = useState(null)
+    const [ voiceMsg, setVoiceMsg ] = useState('')
 
     const navigate = useNavigate()
     const { socket } = useContext(SocketContext)
@@ -97,6 +100,60 @@ const Home = () => {
 
     const bothSelected = Boolean(pickup && destination)
     const anyPanelOpen = vehiclePanel || confirmRidePanel || vehicleFound || waitingForDriver
+
+    // ── Voice booking ──
+    const speak = (text) => {
+        try {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel()
+                window.speechSynthesis.speak(new SpeechSynthesisUtterance(text))
+            }
+        } catch { /* speech synthesis unavailable */ }
+    }
+
+    // Turn a spoken place ("the airport") into a real address via Maps suggestions
+    const resolvePlace = async (text) => {
+        if (!text || text.length < 3) return text
+        try {
+            const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/maps/get-suggestions`, {
+                params: { input: text },
+                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+            })
+            if (Array.isArray(res.data) && res.data.length) return res.data[0]
+        } catch { /* fall back to the raw text */ }
+        return text
+    }
+
+    const handleVoiceResult = async (intent) => {
+        const vt = [ 'car', 'moto', 'auto' ].includes(intent?.vehicleType) ? intent.vehicleType : 'car'
+        if (!intent?.pickup || !intent?.destination) {
+            setVoiceMsg("Couldn't catch both locations. Try: “Book a car from MG Road to the airport.”")
+            speak("I couldn't catch both the pickup and destination. Please try again.")
+            return
+        }
+        setVoiceMsg('Setting up your ride…')
+        const [ p, d ] = await Promise.all([ resolvePlace(intent.pickup), resolvePlace(intent.destination) ])
+        setPickup(p)
+        setDestination(d)
+        setVehicleType(vt)
+        setActiveField(null)
+        setPanelOpen(false)
+        try {
+            const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/rides/get-fare`, {
+                params: { pickup: p, destination: d },
+                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+            })
+            setFare(res.data)
+            setVehiclePanel(false)
+            setConfirmRidePanel(true)
+            setVoiceMsg('')
+            const label = VEHICLES[vt]?.name || 'ride'
+            speak(`Booking a ${label} from ${p} to ${d}. The fare is ${res.data[vt]} rupees. Please confirm to find a driver.`)
+        } catch {
+            setVoiceMsg('Could not get a fare for those locations. Please try again.')
+            speak('Sorry, I could not get a fare for those locations.')
+        }
+    }
 
     return (
         /* Full height of the phone frame */
@@ -174,10 +231,14 @@ const Home = () => {
                     <button
                         onClick={findTrip}
                         disabled={!bothSelected}
-                        className={`w-full font-medium py-4 rounded-2xl transition shadow-sm text-sm ${bothSelected ? 'bg-primary hover:bg-primaryHover text-white' : 'bg-inputBg text-textMuted cursor-not-allowed'}`}
+                        className={`w-full font-medium py-4 rounded-2xl transition shadow-sm text-sm mb-3 ${bothSelected ? 'bg-primary hover:bg-primaryHover text-white' : 'bg-inputBg text-textMuted cursor-not-allowed'}`}
                     >
                         {bothSelected ? 'Search Rides' : 'Enter pickup & destination'}
                     </button>
+
+                    {/* Voice booking */}
+                    <VoiceBooking onResult={handleVoiceResult} onError={setVoiceMsg} />
+                    {voiceMsg && <p className='mt-2 text-xs text-textMuted text-center'>{voiceMsg}</p>}
                 </div>
             </div>
 
